@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { Loan, Payment, CreditProfile, SchedulePeriod } from '../types';
 
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'https://amortly-api-production.up.railway.app';
 
 const api = axios.create({ baseURL: BASE_URL });
 
