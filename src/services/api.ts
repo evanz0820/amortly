@@ -17,7 +17,7 @@ export const createLoan = async (payload: {
   term_months: number;
   start_date: string;
 }): Promise<Loan> => {
-  const res = await api.post('/loans', payload);
+  const res = await api.post('/loans/', payload);
   return res.data;
 };
 
