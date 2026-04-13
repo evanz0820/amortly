@@ -1,4 +1,5 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../store/authStore';
 import './TabLayout.css';
 
 const tabs = [
@@ -9,6 +10,13 @@ const tabs = [
 ];
 
 export default function TabLayout() {
+  const navigate = useNavigate();
+  const { user, logout } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/signin');
+  };
 
   return (
     <div className="app-shell">
@@ -34,7 +42,18 @@ export default function TabLayout() {
         </nav>
 
         <div className="sidebar-footer">
-          <div className="sidebar-footer-text">Amortly v1.0</div>
+          {user && (
+            <div className="sidebar-user">
+              <div className="sidebar-user-avatar">{user.name.charAt(0).toUpperCase()}</div>
+              <div className="sidebar-user-info">
+                <span className="sidebar-user-name">{user.name}</span>
+                <span className="sidebar-user-email">{user.email}</span>
+              </div>
+            </div>
+          )}
+          <button className="sidebar-logout" onClick={handleLogout}>
+            Sign Out
+          </button>
         </div>
       </aside>
 

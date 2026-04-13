@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createLoan } from '../services/api';
 import { useLoanStore } from '../store/loanStore';
+import { useAuthStore } from '../store/authStore';
 import './NewLoan.css';
-
-const MOCK_USER_ID = '323ba38f-ae2c-4a01-9cf7-5642c87686be';
 
 export default function NewLoan() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { loans, setLoans } = useLoanStore();
   const [principal, setPrincipal] = useState('');
   const [rate, setRate] = useState('');
@@ -42,7 +42,7 @@ export default function NewLoan() {
     setLoading(true);
     try {
       const loan = await createLoan({
-        user_id: MOCK_USER_ID,
+        user_id: user!.id,
         principal: p,
         annual_interest_rate: r / 100,
         term_months: t,

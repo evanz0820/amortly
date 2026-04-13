@@ -1,20 +1,21 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLoanStore } from '../store/loanStore';
+import { useAuthStore } from '../store/authStore';
 import { fetchLoans, fetchCreditProfile } from '../services/api';
 import LoanCard from '../components/LoanCard';
 import './Dashboard.css';
 
-const MOCK_USER_ID = '323ba38f-ae2c-4a01-9cf7-5642c87686be';
-
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { loans, creditProfile, setLoans, setCreditProfile } = useLoanStore();
 
   useEffect(() => {
-    fetchLoans(MOCK_USER_ID).then(setLoans).catch(() => {});
-    fetchCreditProfile(MOCK_USER_ID).then(setCreditProfile).catch(() => {});
-  }, [setLoans, setCreditProfile]);
+    if (!user) return;
+    fetchLoans(user.id).then(setLoans).catch(() => {});
+    fetchCreditProfile(user.id).then(setCreditProfile).catch(() => {});
+  }, [user, setLoans, setCreditProfile]);
 
   const activeLoans = loans.filter((l) => l.status === 'active');
   const totalBalance = activeLoans.reduce((sum, l) => sum + Number(l.principal), 0);

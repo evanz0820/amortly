@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLoanStore } from '../store/loanStore';
+import { useAuthStore } from '../store/authStore';
 import { fetchLoans } from '../services/api';
 import LoanCard from '../components/LoanCard';
 import type { LoanStatus } from '../types';
 import './Loans.css';
 
-const MOCK_USER_ID = '323ba38f-ae2c-4a01-9cf7-5642c87686be';
-
 type Filter = 'all' | LoanStatus;
 
 export default function Loans() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { loans, setLoans } = useLoanStore();
   const [filter, setFilter] = useState<Filter>('all');
 
   useEffect(() => {
-    fetchLoans(MOCK_USER_ID).then(setLoans).catch(() => {});
-  }, [setLoans]);
+    if (!user) return;
+    fetchLoans(user.id).then(setLoans).catch(() => {});
+  }, [user, setLoans]);
 
   const filtered = filter === 'all' ? loans : loans.filter((l) => l.status === filter);
 

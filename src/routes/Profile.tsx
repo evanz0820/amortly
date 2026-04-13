@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
 import { useLoanStore } from '../store/loanStore';
+import { useAuthStore } from '../store/authStore';
 import { fetchCreditProfile, fetchPayments } from '../services/api';
 import CreditScoreGauge from '../components/CreditScoreGauge';
 import PaymentRow from '../components/PaymentRow';
 import './Profile.css';
 
-const MOCK_USER_ID = '323ba38f-ae2c-4a01-9cf7-5642c87686be';
-
 export default function Profile() {
+  const { user } = useAuthStore();
   const { creditProfile, setCreditProfile, payments, setPayments } = useLoanStore();
 
   useEffect(() => {
-    fetchCreditProfile(MOCK_USER_ID).then(setCreditProfile).catch(() => {});
-    fetchPayments(MOCK_USER_ID).then(setPayments).catch(() => {});
-  }, [setCreditProfile, setPayments]);
+    if (!user) return;
+    fetchCreditProfile(user.id).then(setCreditProfile).catch(() => {});
+    fetchPayments(user.id).then(setPayments).catch(() => {});
+  }, [user, setCreditProfile, setPayments]);
 
   const recentPayments = [...payments]
     .sort((a, b) => new Date(b.paid_at).getTime() - new Date(a.paid_at).getTime())

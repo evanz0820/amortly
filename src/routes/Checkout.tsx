@@ -8,10 +8,9 @@ import {
 } from '@stripe/react-stripe-js';
 import { createPaymentIntent } from '../services/api';
 import { useLoanStore } from '../store/loanStore';
+import { useAuthStore } from '../store/authStore';
 import { stripePromise } from '../services/stripe';
 import './Checkout.css';
-
-const MOCK_USER_ID = '323ba38f-ae2c-4a01-9cf7-5642c87686be';
 
 function CheckoutForm({ amount, dueDate }: { amount: number; dueDate: string }) {
   const stripe = useStripe();
@@ -68,21 +67,22 @@ function CheckoutForm({ amount, dueDate }: { amount: number; dueDate: string }) 
 
 export default function Checkout() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { activeLoanId, schedule } = useLoanStore();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
 
   const nextPending = schedule.find((s) => s.status === 'pending');
 
   useEffect(() => {
-    if (!activeLoanId || !nextPending) return;
+    if (!activeLoanId || !nextPending || !user) return;
     createPaymentIntent({
       loan_id: activeLoanId,
       schedule_id: nextPending.id,
-      user_id: MOCK_USER_ID,
+      user_id: user.id,
       amount: nextPending.scheduled_payment,
       payment_type: 'regular',
     }).then((res) => setClientSecret(res.client_secret));
-  }, [activeLoanId, nextPending?.id]);
+  }, [activeLoanId, nextPending?.id, user]);
 
   return (
     <div className="checkout-page">
