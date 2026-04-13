@@ -24,7 +24,7 @@ function CheckoutForm({ amount, dueDate }: { amount: number; dueDate: string }) 
     setLoading(true);
     const { error } = await stripe.confirmPayment({
       elements,
-      confirmParams: { return_url: window.location.origin + '/dashboard' },
+      confirmParams: { return_url: window.location.origin + window.location.pathname + '#/dashboard' },
     });
     setLoading(false);
     if (error) {
