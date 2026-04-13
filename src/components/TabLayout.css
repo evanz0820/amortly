@@ -147,6 +147,26 @@
   text-overflow: ellipsis;
 }
 
+.sidebar-signin-btn {
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-bottom: 8px;
+  font-family: inherit;
+}
+
+.sidebar-signin-btn:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 2px 8px rgba(108, 99, 255, 0.3);
+}
+
 .sidebar-logout {
   width: 100%;
   padding: 8px 12px;
@@ -158,6 +178,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all var(--transition-fast);
+  font-family: inherit;
 }
 
 .sidebar-logout:hover {
