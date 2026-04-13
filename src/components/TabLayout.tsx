@@ -11,11 +11,11 @@ const tabs = [
 
 export default function TabLayout() {
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
+  const { user, demoMode, logout } = useAuthStore();
 
   const handleLogout = () => {
     logout();
-    navigate('/signin');
+    navigate('/');
   };
 
   return (
@@ -47,12 +47,22 @@ export default function TabLayout() {
               <div className="sidebar-user-avatar">{user.name.charAt(0).toUpperCase()}</div>
               <div className="sidebar-user-info">
                 <span className="sidebar-user-name">{user.name}</span>
-                <span className="sidebar-user-email">{user.email}</span>
+                <span className="sidebar-user-email">
+                  {demoMode ? 'Demo Mode' : user.email}
+                </span>
               </div>
             </div>
           )}
+          {demoMode && (
+            <button
+              className="sidebar-signin-btn"
+              onClick={() => { logout(); navigate('/signup'); }}
+            >
+              Create Account
+            </button>
+          )}
           <button className="sidebar-logout" onClick={handleLogout}>
-            Sign Out
+            {demoMode ? 'Exit Demo' : 'Sign Out'}
           </button>
         </div>
       </aside>
