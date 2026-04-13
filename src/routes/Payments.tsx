@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLoanStore } from '../store/loanStore';
+import { useAuthStore } from '../store/authStore';
 import { fetchPayments } from '../services/api';
 import PaymentRow from '../components/PaymentRow';
 import type { StripeStatus } from '../types';
 import './Payments.css';
 
-const MOCK_USER_ID = '323ba38f-ae2c-4a01-9cf7-5642c87686be';
-
 type Filter = 'all' | StripeStatus;
 
 export default function Payments() {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { payments, setPayments } = useLoanStore();
   const [filter, setFilter] = useState<Filter>('all');
 
   useEffect(() => {
-    fetchPayments(MOCK_USER_ID).then(setPayments).catch(() => {});
-  }, [setPayments]);
+    if (!user) return;
+    fetchPayments(user.id).then(setPayments).catch(() => {});
+  }, [user, setPayments]);
 
   const sorted = [...payments].sort(
     (a, b) => new Date(b.paid_at).getTime() - new Date(a.paid_at).getTime()

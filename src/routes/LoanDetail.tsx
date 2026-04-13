@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useLoanStore } from '../store/loanStore';
+import { useAuthStore } from '../store/authStore';
 import { fetchLoans, fetchSchedule } from '../services/api';
 import AmortizationChart from '../components/AmortizationChart';
 import PayoffProjection from '../components/PayoffProjection';
 import type { SchedulePeriod } from '../types';
 import './LoanDetail.css';
 
-const MOCK_USER_ID = '323ba38f-ae2c-4a01-9cf7-5642c87686be';
-
 export default function LoanDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { loans, setLoans, setActiveLoanId, setSchedule: setStoreSchedule } = useLoanStore();
   const [schedule, setSchedule] = useState<SchedulePeriod[]>([]);
   const [loading, setLoading] = useState(true);
@@ -19,10 +19,10 @@ export default function LoanDetail() {
   const loan = loans.find((l) => l.id === id);
 
   useEffect(() => {
-    if (!loans.length) {
-      fetchLoans(MOCK_USER_ID).then(setLoans).catch(() => {});
+    if (!loans.length && user) {
+      fetchLoans(user.id).then(setLoans).catch(() => {});
     }
-  }, [loans.length, setLoans]);
+  }, [loans.length, user, setLoans]);
 
   useEffect(() => {
     if (!id) return;
