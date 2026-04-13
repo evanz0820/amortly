@@ -1,7 +1,7 @@
 import axios from 'axios';
 import type { Loan, Payment, CreditProfile, SchedulePeriod } from '../types';
 
-const BASE_URL = 'https://amortly-api.fly.dev';
+const BASE_URL = 'https://amortly-api.onrender.com';
 
 const api = axios.create({ baseURL: BASE_URL });
 
