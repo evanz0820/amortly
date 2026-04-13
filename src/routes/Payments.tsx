@@ -18,7 +18,7 @@ export default function Payments() {
   useEffect(() => {
     if (!user) return;
     fetchPayments(user.id).then(setPayments).catch(() => {});
-  }, [user, setPayments]);
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const sorted = [...payments].sort(
     (a, b) => new Date(b.paid_at).getTime() - new Date(a.paid_at).getTime()

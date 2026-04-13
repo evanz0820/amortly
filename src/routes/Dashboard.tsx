@@ -15,7 +15,7 @@ export default function Dashboard() {
     if (!user) return;
     fetchLoans(user.id).then(setLoans).catch(() => {});
     fetchCreditProfile(user.id).then(setCreditProfile).catch(() => {});
-  }, [user, setLoans, setCreditProfile]);
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const activeLoans = loans.filter((l) => l.status === 'active');
   const totalBalance = activeLoans.reduce((sum, l) => sum + Number(l.principal), 0);

@@ -18,7 +18,7 @@ export default function Loans() {
   useEffect(() => {
     if (!user) return;
     fetchLoans(user.id).then(setLoans).catch(() => {});
-  }, [user, setLoans]);
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const filtered = filter === 'all' ? loans : loans.filter((l) => l.status === filter);
 

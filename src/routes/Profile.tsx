@@ -14,7 +14,7 @@ export default function Profile() {
     if (!user) return;
     fetchCreditProfile(user.id).then(setCreditProfile).catch(() => {});
     fetchPayments(user.id).then(setPayments).catch(() => {});
-  }, [user, setCreditProfile, setPayments]);
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const recentPayments = [...payments]
     .sort((a, b) => new Date(b.paid_at).getTime() - new Date(a.paid_at).getTime())

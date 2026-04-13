@@ -19,10 +19,10 @@ export default function LoanDetail() {
   const loan = loans.find((l) => l.id === id);
 
   useEffect(() => {
-    if (!loans.length && user) {
+    if (user) {
       fetchLoans(user.id).then(setLoans).catch(() => {});
     }
-  }, [loans.length, user, setLoans]);
+  }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!id) return;
@@ -35,7 +35,7 @@ export default function LoanDetail() {
       })
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [id, setActiveLoanId]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!loan && !loading) {
     return (
